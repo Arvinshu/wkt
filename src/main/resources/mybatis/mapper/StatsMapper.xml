@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ls.mapper.StatsMapper">
+    <select id="getDepartmentStats" resultType="org.ls.entity.DepartmentStat">
+        WITH processed_data AS (SELECT CASE
+                                           WHEN dep IS NULL OR dep = '' OR dep = '未分配' THEN '其他'
+                                           ELSE dep
+                                           END AS department,
+                                       employee,
+                                       ts_bm,
+                                       ts_hours
+                                FROM t_wkt)
+        SELECT department,
+               COUNT(DISTINCT employee)                                                                     AS count,
+               ROUND(SUM(CASE WHEN ts_bm IN ('999003', '999004') THEN ts_hours ELSE 0 END)::numeric / 8,
+                     2)                                                                                     AS excludedDays,
+               ROUND(
+                       SUM(CASE WHEN ts_bm NOT IN ('999003', '999004') THEN ts_hours ELSE 0 END)::numeric
+                           / NULLIF(SUM(ts_hours), 0), 4
+               )                                                                                            AS projectRate,
+               STRING_AGG(DISTINCT employee, ', ' ORDER BY employee)                                        AS applicants
+        FROM processed_data
+        GROUP BY department
+        ORDER BY count DESC;
+    </select>
+</mapper>

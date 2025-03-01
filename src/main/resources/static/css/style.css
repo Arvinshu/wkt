@@ -1,0 +1,136 @@
+/* ================= 全局基础样式 ================= */
+body {
+    font-smooth: always;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+}
+
+/* ================= 部门统计页样式 ================= */
+.stats-page .stats-container {
+    margin-top: 70px; /* 为固定导航预留空间 */
+    padding: 20px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 80px; /* 适配分页栏高度 */
+}
+
+/* ================= 工时数据页样式 ================= */
+.working-hours-page .container {
+    margin-top: 48px; /* 导航栏高度补偿 */
+    padding: 20px;
+    padding-bottom: 60px; /* 分页栏高度补偿+额外间距 */
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ================= 表格系统 ================= */
+.table-container {
+    height: calc(100vh - 48px - 60px - 40px);/* 视口高度 - 导航栏 - 分页栏 */
+    min-height: 300px;
+    overflow: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.fixed-header {
+    position: sticky;
+    top: 48px; /* 与导航栏间距 */
+    z-index: 990;
+    background: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+#dataTable th {
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #333;
+}
+
+#dataTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+#dataTable tr:hover td {
+    background-color: #f8f9fa;
+}
+
+/* ================= 分页系统 ================= */
+.pagination-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 12px 0;
+    z-index: 1000;
+}
+
+.pagination-container {
+    max-width: 980px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* ================= 响应式适配 ================= */
+@media (max-width: 768px) {
+    /* 移动端导航栏高度补偿 */
+    .working-hours-page .container {
+        margin-top: 44px;
+        padding: 10px;
+        padding-bottom: 40px;
+    }
+
+    .table-container {
+        height: calc(100vh - 44px - 50px - 20px);
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .fixed-header {
+        top: 44px;
+    }
+
+    /* 表格内容字号调整 */
+    #dataTable th,
+    #dataTable td {
+        font-size: 10px;
+        padding: 10px 12px;
+    }
+
+    /* 分页栏垂直排列 */
+    .pagination-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* 滚动条美化,自定义滚动条样式 */
+.table-container::-webkit-scrollbar {
+    width: 6px;
+    background: #f1f1f1;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}

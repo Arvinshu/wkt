@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ls.mapper.WktMapper">
+    <select id="selectAll" resultType="org.ls.entity.Wkt">
+        SELECT tr,
+               employee,
+               dep,
+               ts_status     as tsStatus,
+               ts_date       as tsDate,
+               ts_hours      as tsHours,
+               ts_bm         as tsBm,
+               ts_name       as tsName,
+               zone
+        FROM t_wkt
+    </select>
+
+    <select id="selectByPage" resultType="org.ls.entity.Wkt">
+        SELECT tr,
+               employee,
+               dep,
+               ts_status     as tsStatus,
+               ts_date       as tsDate,
+               ts_hours      as tsHours,
+               ts_bm         as tsBm,
+               ts_name       as tsName,
+               zone
+        FROM t_wkt
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM t_wkt
+    </select>
+</mapper>
