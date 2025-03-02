@@ -33,6 +33,7 @@
     * JavaScript
 
 ## 项目结构
+```java
 docs/ # 项目文档
 src/main/java/org/ls/ # 主Java包
 ├── config/ # Spring Boot配置类
@@ -43,7 +44,7 @@ src/main/java/org/ls/ # 主Java包
 src/main/resources/ # 资源文件
 ├── static/ # 前端静态资源
 └── mybatis/ # MyBatis配置
-
+```
 
 ## 运行环境
 

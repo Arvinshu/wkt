@@ -1,3 +1,4 @@
+// src/main/resources/static/js/stats.js
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/stats/department')
         .then(response => response.json())
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return `
                 <tr>
                     <td>${item.department}</td>
+                    <td>${item.manager || '未设置'}</td> <!-- 部门负责人 -->
                     <td>${item.count}</td>
                     <td>${excludedDays}</td>
                     <td class="${highlightClass}">${rateValue}</td>

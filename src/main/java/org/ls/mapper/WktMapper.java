@@ -9,4 +9,6 @@ public interface WktMapper {
     List<Wkt> selectAll();
     List<Wkt> selectByPage(Integer offset, Integer limit);
     Integer selectTotalCount();
+    List<String> selectDistinctDepartments();
+
 }

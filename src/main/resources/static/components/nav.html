@@ -1,15 +1,15 @@
+<!-- src/main/resources/static/components/nav.html -->
 <header class="global-nav">
     <nav>
         <ul class="nav-links">
-            <li>
-                <a href="/" class="nav-item" data-page="stats">
-                    <span class="nav-item-text">部门统计</span>
-                </a>
-            </li>
-            <li>
-                <a href="/working-hours.html" class="nav-item" data-page="working-hours">
-                    <span class="nav-item-text">工时数据</span>
-                </a>
+            <li><a href="/" class="nav-item" data-page="stats">部门统计</a></li>
+            <li><a href="/working-hours.html" class="nav-item" data-page="working-hours">工时数据</a></li>
+            <li class="has-submenu">
+                <a href="#" class="nav-item">数据维护 ▼</a>
+                <ul class="submenu">
+                    <li><a href="/department-manager.html">部门负责人维护</a></li>
+                    <!-- 可扩展其他维护项 -->
+                </ul>
             </li>
         </ul>
     </nav>

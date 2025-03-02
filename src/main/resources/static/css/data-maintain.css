@@ -1,0 +1,102 @@
+/* src/main/resources/static/css/data-maintain.css */
+.data-maintain-frame {
+    display: flex;
+    margin-top: 70px;
+    min-height: calc(100vh - 100px);
+}
+
+.sidebar {
+    width: 240px;
+    background: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.main-content {
+    flex: 1;
+    padding: 25px;
+}
+
+.module-container {
+    display: none;
+    animation: fadeIn 0.3s;
+}
+.module-container.active {
+    display: block;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.data-table th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.btn-save {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+.btn-save:disabled {
+    background: #6c757d;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* data-maintain.css 新增按钮样式 */
+.btn-sync {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-sync:hover {
+    background: #138496;
+}
+
+/* 同步加载提示 */
+.sync-toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.sync-toast.error {
+    background: #dc3545;
+}
+
+/* 防止按钮点击区域闪烁 */
+.btn-sync:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

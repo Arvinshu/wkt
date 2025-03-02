@@ -32,4 +32,14 @@
         SELECT COUNT(*)
         FROM t_wkt
     </select>
+
+    <!-- 新增部门查询映射 -->
+    <select id="selectDistinctDepartments" resultType="java.lang.String">
+        SELECT DISTINCT dep
+        FROM t_wkt
+        WHERE dep IS NOT NULL
+          AND dep != '未分配'
+          AND dep != ''
+    </select>
+
 </mapper>

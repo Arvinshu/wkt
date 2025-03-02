@@ -48,6 +48,33 @@ alter table public.t_wkt
 
 ```
 
+### 部门负责人表
+```sql
+DROP TABLE IF EXISTS t_department_manager; -- 如果原表存在则删除
+
+CREATE TABLE t_department_manager (
+    id SERIAL PRIMARY KEY,
+    department_name VARCHAR(255) UNIQUE NOT NULL, -- 部门名称（与 t_wkt.dep 一致）
+    department_leader VARCHAR(255), -- 部门负责人
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP
+);
+COMMENT ON TABLE t_department_manager IS '数据维护主表';
+```
+数据初始化
+```sql
+INSERT INTO t_department_manager (department_name)
+SELECT DISTINCT dep FROM t_wkt
+ON CONFLICT (department_name) DO NOTHING;
+```
+
+更新权限
+```sql
+-- 确保应用用户有 t_department_manager 表的读写权限
+GRANT SELECT, INSERT, UPDATE ON t_department_manager TO postgres;
+```
+
+
 ## 关键业务查询DDL
 
 ### 部门员工统计及工时率统计

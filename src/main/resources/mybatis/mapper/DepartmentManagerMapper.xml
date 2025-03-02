@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ls.mapper.DepartmentManagerMapper">
+
+    <select id="selectAll" resultType="org.ls.entity.DepartmentManager">
+        SELECT
+            department_name AS departmentName,
+            department_leader AS departmentLeader
+        FROM t_department_manager
+        WHERE active = TRUE
+    </select>
+
+    <update id="updateManager">
+        UPDATE t_department_manager
+        SET department_leader = #{departmentLeader},
+            updated_at = NOW()
+        WHERE department_name = #{departmentName}
+    </update>
+
+    <!-- 新增SQL -->
+    <select id="selectActiveDepartments" resultType="java.lang.String">
+        SELECT department_name
+        FROM t_department_manager
+        WHERE active = TRUE
+    </select>
+
+    <insert id="insertNewDepartments">
+        INSERT INTO t_department_manager (department_name)
+        VALUES
+        <foreach item="dept" collection="departments" separator=",">
+            (#{dept})
+        </foreach>
+        ON CONFLICT (department_name) DO NOTHING
+    </insert>
+
+    <update id="markInactiveDepartments">
+        UPDATE t_department_manager
+        SET active = FALSE
+        WHERE department_name NOT IN
+        <foreach item="dept" collection="departments" open="(" separator="," close=")">
+            #{dept}
+        </foreach>
+    </update>
+
+    <!-- DepartmentManagerMapper.xml -->
+    <update id="markAllInactive">
+        UPDATE t_department_manager
+        SET active = FALSE
+    </update>
+
+</mapper>

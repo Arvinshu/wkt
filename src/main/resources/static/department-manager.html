@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>数据维护系统</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/data-maintain.css">
+</head>
+<body>
+<div id="nav-container"></div>
+
+<!-- 通用数据维护框架容器 -->
+<div class="data-maintain-frame">
+    <!-- 侧边栏导航 -->
+    <div class="sidebar">
+        <div class="menu-group">
+            <div class="menu-title">数据维护项</div>
+            <ul class="submenu">
+                <li class="active" data-module="department-manager">
+                    <a href="javascript:void(0)">▶ 部门负责人</a>
+                </li>
+                <!-- 预留其他维护项插槽 -->
+                <li class="menu-placeholder">更多维护功能开发中...</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 部门负责人维护模块 -->
+        <div class="module-container active" id="department-manager">
+            <div class="module-header">
+                <h2><span class="icon">📋</span> 部门负责人维护</h2>
+                <div class="toolbar">
+                    <button id="btn-refresh" class="btn-refresh">刷新数据</button>
+                    <button class="btn-sync" onclick="syncDepartments()">同步部门</button>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th width="25%">部门名称</th>
+                    <th width="20%">创建时间</th>
+                    <th width="20%">最后更新</th>
+                    <th width="25%">部门负责人</th>
+                    <th width="10%">操作</th>
+                </tr>
+                </thead>
+                <tbody id="managerTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- 预留其他模块容器 -->
+        <div class="module-placeholder">
+            <div class="empty-state">
+                <div class="icon">📁</div>
+                <p>选择左侧菜单开始数据维护</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/nav-loader.js"></script>
+<script src="/js/data-maintain.js"></script> <!-- 先加载通用逻辑 -->
+<script src="/js/manager.js"></script>      <!-- 后加载模块专属逻辑 -->
+
+<script>
+    // 部门负责人维护专属逻辑
+    function loadManagers() {
+        fetch('/api/department-manager')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('managerTableBody');
+                tbody.innerHTML = data.map(item => `
+                    <tr>
+                        <td>${item.departmentName}</td>
+                        <td>${new Date(item.createdAt).toLocaleString()}</td>
+                        <td>${item.updatedAt ? new Date(item.updatedAt).toLocaleString() : '-'}</td>
+                        <td>
+                            <input type="text"
+                                   value="${item.departmentLeader || ''}"
+                                   data-original="${item.departmentLeader || ''}"
+                                   onchange="toggleSaveButton(this)">
+                        </td>
+                        <td>
+                            <button class="btn-save"
+                                    onclick="saveManager('${item.departmentName}', this)"
+                                    disabled>保存</button>
+                        </td>
+                    </tr>
+                `).join('');
+            });
+    }
+
+    function toggleSaveButton(input) {
+        const btn = input.closest('tr').querySelector('.btn-save');
+        btn.disabled = input.value === input.dataset.original;
+    }
+
+    function saveManager(departmentName, btn) {
+        const input = btn.closest('tr').querySelector('input');
+        fetch('/api/department-manager', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                departmentName: departmentName,
+                departmentLeader: input.value
+            })
+        }).then(() => {
+            input.dataset.original = input.value;
+            btn.disabled = true;
+            showToast('✅ 数据保存成功');
+        }).catch(() => showToast('❌ 保存失败，请检查网络'));
+    }
+
+    // 初始化加载
+    document.addEventListener('DOMContentLoaded', loadManagers);
+</script>
+</body>
+</html>

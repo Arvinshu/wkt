@@ -1,3 +1,4 @@
+// src/main/java/org/ls/entity/DepartmentStat.java
 package org.ls.entity;
 
 import lombok.Data;
@@ -6,6 +7,7 @@ import java.math.BigDecimal;
 @Data
 public class DepartmentStat {
     private String department; // 处理后的部门名称
+    private String manager; // 部门负责人
     private Integer count;     // 人数统计
     private BigDecimal excludedDays;    // 新增：休假工时人天
     private BigDecimal projectRate;    // 新增：项目工时率
