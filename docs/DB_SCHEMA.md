@@ -19,7 +19,8 @@ mybatis.configuration.map-underscore-to-camel-case=true
 ```sql
 create table public.t_wkt
 (
-    id            integer generated always as identity        primary key,
+    id            integer generated always as identity
+        primary key,
     ts_id         varchar(30) not null,
     tr            varchar(50),
     employee      varchar(30),
@@ -44,22 +45,32 @@ comment on column public.t_wkt.proj_comments is '项目备注是否属于特别�
 
 alter table public.t_wkt
     owner to postgres;
-
-
 ```
 
 ### 部门负责人表
 ```sql
 DROP TABLE IF EXISTS t_department_manager; -- 如果原表存在则删除
-
-CREATE TABLE t_department_manager (
-    id SERIAL PRIMARY KEY,
-    department_name VARCHAR(255) UNIQUE NOT NULL, -- 部门名称（与 t_wkt.dep 一致）
-    department_leader VARCHAR(255), -- 部门负责人
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP
+create table public.t_department_manager
+(
+    id                serial
+        primary key,
+    department_name   varchar(255)           not null
+        unique,
+    department_leader varchar(255),
+    created_at        timestamp default now(),
+    updated_at        timestamp,
+    active            boolean   default true not null
 );
-COMMENT ON TABLE t_department_manager IS '数据维护主表';
+
+comment on table public.t_department_manager is '数据维护主表';
+
+alter table public.t_department_manager
+    owner to postgres;
+
+create index idx_department_active
+    on public.t_department_manager (active);
+
+
 ```
 数据初始化
 ```sql
@@ -75,35 +86,31 @@ GRANT SELECT, INSERT, UPDATE ON t_department_manager TO postgres;
 ```
 
 
-## 关键业务查询DDL
-
-### 部门员工统计及工时率统计
-
+### 项目利润中心表
 ```sql
-WITH processed_data AS (SELECT CASE
-                                   WHEN dep IS NULL OR dep = '' OR dep = '未分配' THEN '其他'
-                                   ELSE dep
-                                   END AS department,
-                               employee,
-                               ts_bm,
-                               ts_hours
-                        FROM t_wkt)
-SELECT department,
-       COUNT(DISTINCT employee)                              AS count,
-       ROUND(SUM(
-                     CASE
-                         WHEN ts_bm IN ('999003', '999004')
-                             THEN ts_hours
-                         ELSE 0 END
-             )::numeric / 8, 2)                              AS excludedDays,
+create table public.t_project_profit_center
+(
+    id                    serial    primary key,
+    zone                  varchar(200)    not null        unique,
+    project_profit_center varchar(200),
+    active                boolean   default true not null,
+    created_at            timestamp default now(),
+    updated_at            timestamp,
+    business_type         varchar(200),
+    region_category       varchar(200),
+    region_name           varchar(200),
+    center_name           varchar(200),
+    business_subcategory  varchar(200),
+    department_name       varchar(200),
+    responsible_person    varchar(100),
+    work_location         varchar(200)
+);
 
-       ROUND(
-               SUM(CASE WHEN ts_bm NOT IN ('999003', '999004') THEN ts_hours ELSE 0 END)::numeric
-                   / NULLIF(SUM(ts_hours), 0), 4
-       )                                                     AS projectRate,
+alter table public.t_project_profit_center
+    owner to postgres;
 
-       STRING_AGG(DISTINCT employee, ', ' ORDER BY employee) AS applicants
-FROM processed_data
-GROUP BY department
-ORDER BY count DESC
 ```
+
+
+
+## 关键业务查询DDL

@@ -43,6 +43,13 @@
     border-bottom: 1px solid #eee;
 }
 
+/* 只读字段单元格样式 */
+.data-table td:not(:nth-last-child(3)):not(:nth-last-child(2)) {
+    background: #f8f9fa;  /* 浅灰色背景 */
+    color: #666;          /* 深灰色文字 */
+    padding: 10px 12px;
+}
+
 .btn-save {
     background: #28a745;
     color: white;
@@ -63,19 +70,54 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* data-maintain.css 新增按钮样式 */
+/* 加载动画 */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* 同步按钮基础样式 */
+.btn-sync .spinner,
+.btn-refresh .spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 5px;
+}
+
+
+
+
+
 .btn-sync {
-    background: #17a2b8;
+    background: #17a2b8; /* 原同步按钮颜色 */
     color: white;
     border: none;
     padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
+    transition: background 0.3s ease;
 }
 
-.btn-sync:hover {
-    background: #138496;
+/* 刷新按钮样式 */
+.btn-refresh {
+    background: #666; /* 高级灰色调 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+/* 共用悬停效果 */
+.btn-sync:hover,
+.btn-refresh:hover {
+    opacity: 0.9;
 }
 
 /* 同步加载提示 */
@@ -95,8 +137,27 @@
     background: #dc3545;
 }
 
-/* 防止按钮点击区域闪烁 */
-.btn-sync:disabled {
-    opacity: 0.7;
+/* 禁用状态，防止按钮点击区域闪烁 */
+.btn-sync:disabled,
+.btn-refresh:disabled {
+    background: #999;
     cursor: not-allowed;
 }
+
+/* src/main/resources/static/css/data-maintain.css */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 2000;
+}
+
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+

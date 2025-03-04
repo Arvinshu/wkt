@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ls.mapper.ProjectProfitCenterMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="projectProfitCenterMap" type="org.ls.entity.ProjectProfitCenter">
+        <id property="id" column="id"/>
+        <result property="zone" column="zone"/>
+        <result property="businessType" column="business_type"/>
+        <result property="regionCategory" column="region_category"/>
+        <result property="regionName" column="region_name"/>
+        <result property="centerName" column="center_name"/>
+        <result property="businessSubcategory" column="business_subcategory"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="responsiblePerson" column="responsible_person"/>
+        <result property="workLocation" column="work_location"/>
+        <result property="projectProfitCenter" column="project_profit_center"/>
+        <result property="active" column="active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <!-- 查询活跃数据 -->
+    <select id="selectAllActive" resultMap="projectProfitCenterMap">
+        SELECT *
+        FROM t_project_profit_center
+        WHERE active = TRUE
+    </select>
+
+    <!-- 更新负责人和工作地点 -->
+    <update id="updateProfitCenter">
+        UPDATE t_project_profit_center
+        SET
+            responsible_person = #{responsiblePerson},
+            work_location = #{workLocation},
+            updated_at = NOW()
+        WHERE zone = #{zone}
+    </update>
+
+    <!-- 获取所有zone -->
+    <select id="selectAllZones" resultType="java.lang.String">
+        SELECT zone
+        FROM t_project_profit_center
+    </select>
+
+    <!-- 插入拆分字段数据 -->
+    <insert id="insertNewZonesWithSplitFields">
+        INSERT INTO t_project_profit_center (
+        zone,
+        business_type,
+        region_category,
+        region_name,
+        center_name,
+        business_subcategory,
+        department_name,
+        responsible_person,
+        work_location
+        )
+        VALUES
+        <foreach item="item" collection="list" separator=",">
+            (
+            #{item.zone},
+            #{item.businessType},
+            #{item.regionCategory},
+            #{item.regionName},
+            #{item.centerName},
+            #{item.businessSubcategory},
+            #{item.departmentName},
+            #{item.responsiblePerson},
+            #{item.workLocation}
+            )
+        </foreach>
+        ON CONFLICT (zone) DO NOTHING
+    </insert>
+
+    <!-- 标记不活跃zone -->
+    <update id="markInactiveZones">
+        UPDATE t_project_profit_center
+        SET active = FALSE
+        WHERE zone NOT IN
+        <foreach item="zone" collection="activeZones" open="(" separator="," close=")">
+            #{zone}
+        </foreach>
+    </update>
+
+    <select id="selectActiveZones" resultType="java.lang.String">
+        SELECT zone
+        FROM t_project_profit_center
+        WHERE active = TRUE
+    </select>
+
+</mapper>

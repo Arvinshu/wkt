@@ -42,4 +42,11 @@
           AND dep != ''
     </select>
 
+    <!-- 新增的 zone 查询 -->
+    <select id="selectDistinctZones" resultType="java.lang.String">
+        SELECT DISTINCT zone
+        FROM t_wkt
+        WHERE zone IS NOT NULL
+          AND zone != ''
+    </select>
 </mapper>

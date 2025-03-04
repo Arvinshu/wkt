@@ -1,5 +1,7 @@
 // src/main/resources/static/js/manager.js
 
+// import { showToast } from './common.js'; // 使用 ES Modules 模块化导入 common.js 中的 showToast 函数
+
 // ================= 全局工具函数 =================
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
@@ -71,7 +73,7 @@ function saveManager(departmentName, btn) {
         })
     })
         .then(response => {
-            if (!response.ok) throw new Error('保存失败');
+            if (!response.ok) throw new Error('Save failed 保存失败');
             input.dataset.original = newLeader;
             btn.disabled = true;
             showToast('✅ 保存成功');
@@ -122,3 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+window.syncDepartments = syncDepartments; // 暴露到全局
+window.loadManagers = loadManagers;      // 暴露到全局

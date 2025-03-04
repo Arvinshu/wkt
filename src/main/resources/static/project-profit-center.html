@@ -1,0 +1,79 @@
+<!-- src/main/resources/static/project-profit-center.html -->
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>项目利润中心维护</title>
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/data-maintain.css">
+</head>
+<body>
+<div id="nav-container"></div>
+
+<div class="data-maintain-frame">
+    <div class="sidebar">
+        <div class="menu-group">
+            <div class="menu-title">数据维护项</div>
+            <ul class="submenu">
+                <li data-module="profit-center" class="active">
+                    <a href="javascript:void(0)">▶ 项目利润中心</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="module-container active" id="profit-center">
+            <div class="module-header">
+                <h2><span class="icon">📊</span> 项目利润中心维护</h2>
+                <div class="toolbar">
+                    <button class="btn-sync" onclick="syncZones()">同步数据</button>
+                    <button class="btn-refresh" onclick="loadData()">刷新</button>
+                </div>
+            </div>
+
+            <!-- project-profit-center.html -->
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <!-- <th>利润中心编码</th> -->
+                    <th>业务类型</th>
+                    <th>区域分类</th>
+                    <th>大区名称</th>
+                    <th>中心名称</th>
+                    <th>业务子类</th>
+                    <th>部门名称</th>
+                    <th>负责人</th>
+                    <th>工作地点</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="dataBody">
+                <!-- 示例行 -->
+                <tr>
+                    <!-- 只读字段 -->
+                    <!--  <td>基础业务-大区与网省中心-...</td> -->
+                    <td>基础业务</td>
+                    <td>大区与网省中心</td>
+                    <td>大区四</td>
+                    <td>冀北中心</td>
+                    <td>业务</td>
+                    <td>大营销咨询业务部</td>
+
+                    <!-- 可编辑字段 -->
+                    <td><input value="张三"></td>
+                    <td><input value="北京"></td>
+
+                    <td><button class="btn-save">保存</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/nav-loader.js"></script>
+<script src="/js/profit-center.js"></script>
+</body>
+</html>
