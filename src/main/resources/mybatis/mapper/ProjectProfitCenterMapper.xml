@@ -90,4 +90,10 @@
         WHERE active = TRUE
     </select>
 
+    <update id="updateActiveStatus">
+        UPDATE t_project_profit_center
+        SET active = #{active},
+            updated_at = NOW()
+        WHERE zone = #{zone}
+    </update>
 </mapper>

@@ -1,80 +1,89 @@
+/* ================= 部门统计页样式 ================= */
 .stats-container {
     margin-top: 70px;
     padding: 20px;
-    max-width: 800px;
+    width: 90%; /* 改为百分比宽度 */
     margin-left: auto;
     margin-right: auto;
+    overflow-x: auto; /* 小屏幕时允许横向滚动 */
 }
 
 #statsTable {
     width: 100%;
+    min-width: 1000px; /* 最小保证表格内容不拥挤 */
     margin-top: 20px;
     border-collapse: collapse;
+    table-layout: auto; /* 自动列宽分配 */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* 添加阴影提升层次感 */
 }
 
 #statsTable th {
     background-color: #f5f5f7;
-    padding: 12px 15px;
+    padding: 15px 20px; /* 增大内边距 */
     text-align: left;
+    font-size: 15px; /* 调大字号 */
+    border-bottom: 2px solid #ddd;
 }
 
 #statsTable td {
-    padding: 10px 15px;
-    border-bottom: 1px solid #ddd;
+    padding: 12px 20px; /* 增大内边距 */
+    border-bottom: 1px solid #eee;
     transition: background-color 0.3s ease;
+    font-size: 14px;
+    white-space: normal; /* 值为nowrap时候禁止文字换行 */
 }
 
-#statsTable tr:hover td {
-    background-color: #f8f9fa;
+/* 列宽精细调整 */
+#statsTable th:nth-child(1),
+#statsTable td:nth-child(1) { /* 部门名称 */
+    min-width: 250px;
+    max-width: 300px;
 }
 
-/* 申请人列省略号 */
-#statsTable td:nth-child(5) {
-    max-width: 400px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+#statsTable th:nth-child(2),
+#statsTable td:nth-child(2) { /* 负责人 */
+    min-width: 150px;
 }
 
-/* 数值列统一样式 */
-#statsTable td:nth-child(3),
-#statsTable td:nth-child(4) {
-    text-align: right;
+#statsTable th:nth-child(3),
+#statsTable td:nth-child(3) { /* 人数 */
     min-width: 100px;
-    font-family: monospace;
+    text-align: center;
 }
 
-/* 高亮样式（合并定义） */
+#statsTable th:nth-child(4),
+#statsTable td:nth-child(4) { /* 休假工时人天 */
+    min-width: 150px;
+    text-align: right;
+}
+
+#statsTable th:nth-child(5),
+#statsTable td:nth-child(5) { /* 项目工时率 */
+    min-width: 150px;
+    text-align: right;
+}
+
+#statsTable th:nth-child(6),
+#statsTable td:nth-child(6) { /* 部门成员 */
+    min-width: 300px;
+    max-width: 400px;
+}
+
+/* 高亮样式 */
 #statsTable td.highlight-rate {
     color: #28a745;
     font-weight: bold;
-    position: relative;
-}
-
-/* 悬停提示优化 */
-#statsTable td.highlight-rate:hover::after {
-    content: "有效项目工时";
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 5px); /* 改为底部定位 */
-    background: #333;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 1; /* 确保悬浮层在最前 */
 }
 
 /* 移动端适配 */
 @media (max-width: 768px) {
-    #statsTable td:nth-child(5) {
-        max-width: 200px;
+    .stats-container {
+        width: 95%;
+        padding: 10px;
     }
 
-    /* 缩小提示框宽度 */
-    #statsTable td.highlight-rate:hover::after {
-        max-width: 80px;
-        word-break: keep-all;
+    #statsTable th,
+    #statsTable td {
+        padding: 10px 15px; /* 减小内边距 */
     }
 }

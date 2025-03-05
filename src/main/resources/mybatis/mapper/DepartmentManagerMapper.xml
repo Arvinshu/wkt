@@ -49,4 +49,11 @@
         SET active = FALSE
     </update>
 
+    <update id="updateActiveStatus">
+        UPDATE t_department_manager
+        SET active = #{active},
+            updated_at = NOW()
+        WHERE department_name = #{departmentName}
+    </update>
+
 </mapper>

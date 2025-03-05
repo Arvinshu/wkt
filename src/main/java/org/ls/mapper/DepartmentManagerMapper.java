@@ -3,12 +3,12 @@ package org.ls.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.ls.entity.DepartmentManager;
 
 import java.util.List;
 
 @Mapper
-
 public interface DepartmentManagerMapper {
     List<DepartmentManager> selectAll();
 
@@ -28,4 +28,6 @@ public interface DepartmentManagerMapper {
     );
 
     int markAllInactive();
+
+    int updateActiveStatus(@Param("departmentName") String departmentName, @Param("active") Boolean active);
 }

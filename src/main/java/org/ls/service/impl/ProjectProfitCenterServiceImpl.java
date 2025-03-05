@@ -8,8 +8,11 @@ import org.ls.service.ProjectProfitCenterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,18 +45,17 @@ public class ProjectProfitCenterServiceImpl implements ProjectProfitCenterServic
     @Transactional
     public void syncZones() {
         try {
-            // 1. 自动查询 t_wkt 表获取最新 zone 数据
-            List<String> latestZonesFromWkt = wktMapper.selectDistinctZones();
+            // 1. 获取最新zone数据
+            List<String> latestZones = Optional.ofNullable(wktMapper.selectDistinctZones())
+                    .orElse(Collections.emptyList());
 
-            // 2. 获取当前有效 zone 列表
+            // 2. 获取当前有效zone
             List<String> currentActiveZones = mapper.selectActiveZones();
 
-            // 3. 发现新增 zone（需拆分）
-            List<String> newZones = latestZonesFromWkt.stream()
+            // 3. 处理新增zone（拆分字段逻辑）
+            List<String> newZones = latestZones.stream()
                     .filter(z -> !currentActiveZones.contains(z))
-                    .collect(Collectors.toList());
-
-            // 4. 拆分并插入新数据
+                    .toList();
             if (!newZones.isEmpty()) {
                 List<ProjectProfitCenter> splitData = newZones.stream()
                         .map(z -> {
@@ -66,24 +68,33 @@ public class ProjectProfitCenterServiceImpl implements ProjectProfitCenterServic
                                     (parts.length > 3) ? parts[3].trim() : null,
                                     (parts.length > 4) ? parts[4].trim() : null,
                                     (parts.length > 5) ? parts[5].trim() : null,
-                                    null,  // 负责人初始为null
-                                    null   // 工作地点初始为null
+                                    null,  // 负责人初始值
+                                    null   // 工作地点初始值
                             );
                         })
                         .collect(Collectors.toList());
                 mapper.insertNewZonesWithSplitFields(splitData);
             }
 
-            // 5. 标记失效 zone
-            List<String> allZonesInPPC = mapper.selectAllZones();
-            List<String> inactiveZones = allZonesInPPC.stream()
-                    .filter(z -> !latestZonesFromWkt.contains(z))
+            // 4. 重新激活存在的zone（新增核心逻辑）
+            latestZones.forEach(zone -> {
+                mapper.updateActiveStatus(zone, true);
+            });
+
+            // 5. 标记失效zone
+            List<String> allZones = mapper.selectAllZones();
+            List<String> inactiveZones = allZones.stream()
+                    .filter(z -> !latestZones.contains(z))
                     .collect(Collectors.toList());
             if (!inactiveZones.isEmpty()) {
                 mapper.markInactiveZones(inactiveZones);
             }
+
+            log.info("利润中心同步完成：新增 {} 个zone，当前有效zone {} 个",
+                    newZones.size(), latestZones.size());
         } catch (Exception e) {
             log.error("自动同步失败", e);
+            throw new RuntimeException("同步失败: " + e.getMessage());
         }
     }
 }

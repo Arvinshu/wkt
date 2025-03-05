@@ -3,6 +3,7 @@ package org.ls.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.ls.entity.ProjectProfitCenter;
 
 import java.util.List;
@@ -26,5 +27,7 @@ public interface ProjectProfitCenterMapper {
     int insertNewZonesWithSplitFields(List<ProjectProfitCenter> zones);
 
     List<String> selectAllZones();
+
+    int updateActiveStatus(@Param("zone") String zone, @Param("active") Boolean active);
 
 }

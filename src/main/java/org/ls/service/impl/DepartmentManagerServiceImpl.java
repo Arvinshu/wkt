@@ -60,6 +60,11 @@ public class DepartmentManagerServiceImpl implements DepartmentManagerService {
                 departmentManagerMapper.insertNewDepartments(newDepartments);
             }
 
+            // 4. 重新激活已存在的部门（新增逻辑）
+            latestDepartments.forEach(dept -> {
+                departmentManagerMapper.updateActiveStatus(dept, true);
+            });
+
             // 失效部门标记逻辑
             if (latestDepartments.isEmpty()) {
                 // 标记所有部门为不活跃
