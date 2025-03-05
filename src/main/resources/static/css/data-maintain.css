@@ -43,6 +43,18 @@
     border-bottom: 1px solid #eee;
 }
 
+/* 固定序号列宽度 */
+.data-table td:first-child {
+    width: 50px;
+    text-align: center;
+    background: #f8f9fa;
+}
+
+/* 表头样式微调 */
+.data-table th:first-child {
+    min-width: 50px;
+}
+
 /* 只读字段单元格样式 */
 .data-table td:not(:nth-last-child(3)):not(:nth-last-child(2)) {
     background: #f8f9fa;  /* 浅灰色背景 */

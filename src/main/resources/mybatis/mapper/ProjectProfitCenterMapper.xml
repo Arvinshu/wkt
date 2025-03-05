@@ -26,6 +26,13 @@
         SELECT *
         FROM t_project_profit_center
         WHERE active = TRUE
+        ORDER BY
+            business_type ASC,
+            region_category ASC,
+            region_name ASC,
+            center_name ASC,
+            business_subcategory ASC,
+            department_name ASC
     </select>
 
     <!-- 更新负责人和工作地点 -->

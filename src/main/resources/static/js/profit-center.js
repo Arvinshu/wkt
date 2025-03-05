@@ -69,8 +69,9 @@ function renderTable(data) {
     const tbody = document.getElementById('dataBody');
     if (!tbody) return;
 
-    tbody.innerHTML = data.map(item => `
+    tbody.innerHTML = data.map((item, index) => `
         <tr>
+            <td>${index + 1}</td> <!-- 动态生成序号 -->
             <td>${item.businessType || '-'}</td>
             <td>${item.regionCategory || '-'}</td>
             <td>${item.regionName || '-'}</td>
